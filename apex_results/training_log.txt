@@ -1,0 +1,56 @@
+Loading dataset ...
+Train rows 4920 (days 1-123) | embargo days 124-130 | test rows 2000 (days 131-180)
+Injury prevalence: train 8.60% (423 pos) | test 9.30% (186 pos)
+
+=== READINESS (regression) ===
+Ridge Regression             val MAE 5.51 | test MAE 5.15  R2 0.749
+Random Forest                val MAE 5.68 | test MAE 5.39  R2 0.729
+Gradient Boosting (HistGB)   val MAE 5.43 | test MAE 5.17  R2 0.750
+Selected readiness model (by validation MAE): Gradient Boosting (HistGB)
+
+=== INJURY RISK (classification) ===
+Logistic Regression          val PR-AUC 0.160 | test ROC-AUC 0.670  PR-AUC 0.206
+Random Forest                val PR-AUC 0.149 | test ROC-AUC 0.686  PR-AUC 0.219
+Gradient Boosting (HistGB)   val PR-AUC 0.152 | test ROC-AUC 0.631  PR-AUC 0.194
+RF + SMOTE (additional)      val PR-AUC 0.135 | test ROC-AUC 0.671  PR-AUC 0.178
+Selected injury model (by validation PR-AUC): Logistic Regression
+Calibration: Brier raw 0.2154 -> calibrated 0.0809 (no-skill 0.0844); mean predicted 0.085 vs observed 0.093
+Thresholds (from train OOF): F1-optimal 0.105 | Moderate (top 25%) 0.110 | High (top 8%) 0.150
+At F1 threshold: precision 0.183 recall 0.489 F1 0.267
+Confusion matrix [[TN FP],[FN TP]]:
+[[1409  405]
+ [  95   91]]
+
+Test injury rate per risk band:
+           count  sum   mean  lift_vs_base
+band                                     
+Low        1546  106  0.069         0.737
+Moderate    288   41  0.142         1.531
+High        166   39  0.235         2.526
+
+=== Unseen-athlete evaluation (GroupKFold, 5 folds, all 180 days) ===
+  readiness_MAE    5.268 +/- 0.052
+  readiness_R2     0.753 +/- 0.006
+  injury_ROC_AUC   0.680 +/- 0.035
+  injury_PR_AUC    0.218 +/- 0.047
+
+=== Error analysis & interpretation ===
+Top features (readiness): HRV_z 1.151, Session_Duration 0.929, sRPE 0.912, Session_Type 0.758, Soreness_Score 0.625, Acute_WoW 0.218
+Top features (injury): Sleep_Hours 0.031, ACWR 0.023, HRV_z 0.016, Sleep_z 0.012, Soreness_Score 0.007, Session_Duration 0.006
+
+Refitting selected models on all data for deployment ...
+-> saved readiness_model.pkl, injury_model.pkl
+
+=== DONE ===
+                        Model  Val_MAE  Test_MAE  Test_R2
+Baseline (predict train mean)   10.287     9.895   -0.004
+             Ridge Regression    5.510     5.152    0.749
+                Random Forest    5.677     5.394    0.729
+   Gradient Boosting (HistGB)    5.430     5.170    0.750
+                             Model  Val_PR_AUC  Test_ROC_AUC  Test_PR_AUC
+      Baseline A (no skill, prior)       0.086         0.500        0.093
+       Baseline B (ACWR-only rule)       0.099         0.657        0.163
+               Logistic Regression       0.160         0.670        0.206
+                     Random Forest       0.149         0.686        0.219
+        Gradient Boosting (HistGB)       0.152         0.631        0.194
+Random Forest + SMOTE (additional)       0.135         0.671        0.178

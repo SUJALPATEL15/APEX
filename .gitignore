@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+dist/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# SQLite database & local state
+apex.db
+*.db
+*.sqlite3
+
+# Backups & scratch
+*.bak
+backup/
+backup_original/
+scratch/
+
+# Environment & IDE
+.env
+.env.*
+.DS_Store
+.vscode/
+.idea/
+
+# UI subproject
+new ui/node_modules/
+new ui/.next/
+
+# Athlete real-person portrait images (Public repository safety)
+photos/
+public/photos/
+

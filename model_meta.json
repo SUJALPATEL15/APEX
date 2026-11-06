@@ -1,0 +1,132 @@
+{
+  "features": [
+    "Session_Duration",
+    "Total_Distance",
+    "High_Speed_Running",
+    "Accelerations_Decelerations",
+    "sRPE",
+    "Sleep_Hours",
+    "Soreness_Score",
+    "HRV_ms",
+    "Acute_Load",
+    "Chronic_Load",
+    "ACWR",
+    "HRV_z",
+    "Sleep_z",
+    "Soreness_z",
+    "Acute_WoW",
+    "Sport",
+    "Position",
+    "Session_Type"
+  ],
+  "numeric": [
+    "Session_Duration",
+    "Total_Distance",
+    "High_Speed_Running",
+    "Accelerations_Decelerations",
+    "sRPE",
+    "Sleep_Hours",
+    "Soreness_Score",
+    "HRV_ms",
+    "Acute_Load",
+    "Chronic_Load",
+    "ACWR",
+    "HRV_z",
+    "Sleep_z",
+    "Soreness_z",
+    "Acute_WoW"
+  ],
+  "categorical": [
+    "Sport",
+    "Position",
+    "Session_Type"
+  ],
+  "readiness_model": "Gradient Boosting (HistGB)",
+  "readiness_params": "min_samples_leaf=40, max_iter=200, max_depth=3, learning_rate=0.05, l2_regularization=1.0",
+  "injury_model": "Logistic Regression",
+  "injury_params": "C=0.001",
+  "calibration": "Platt scaling on time-ordered OOF scores",
+  "split": {
+    "train_days": "1-123",
+    "embargo_days": "124-130",
+    "test_days": "131-180",
+    "train_rows": 4920,
+    "test_rows": 2000
+  },
+  "thresholds": {
+    "moderate": 0.11511172958576538,
+    "high": 0.16658356569182187,
+    "f1_optimal": 0.10546364750116191
+  },
+  "base_rate": 0.08819444444444445,
+  "readiness_status": {
+    "optimal": 65,
+    "fatigued": 48
+  },
+  "test_metrics": {
+    "readiness": [
+      {
+        "Model": "Baseline (predict train mean)",
+        "Best_Hyperparameters": "-",
+        "Val_MAE": 10.28700624779512,
+        "Test_MAE": 9.89479424390244,
+        "Test_RMSE": 12.962570547320466,
+        "Test_R2": -0.00378310468126819,
+        "Fit_sec": 0.0
+      },
+      {
+        "Model": "Gradient Boosting (HistGB)",
+        "Best_Hyperparameters": "min_samples_leaf=40, max_iter=200, max_depth=3, learning_rate=0.05, l2_regularization=1.0",
+        "Val_MAE": 5.429989052345382,
+        "Test_MAE": 5.169902662839018,
+        "Test_RMSE": 6.469840892779484,
+        "Test_R2": 0.7499396603950674,
+        "Fit_sec": 1.8157811164855957
+      }
+    ],
+    "injury": {
+      "raw_brier": 0.21541417845129177,
+      "cal_brier": 0.08089336011263472,
+      "brier_no_skill": 0.08440034205829863,
+      "roc_auc": 0.6697134592358123,
+      "pr_auc": 0.2059631428420938,
+      "mean_pred": 0.0850098705692343,
+      "test_prevalence": 0.093,
+      "threshold_f1": 0.10546364750116191,
+      "precision": 0.18346774193548387,
+      "recall": 0.489247311827957,
+      "f1": 0.2668621700879765,
+      "confusion_matrix": [
+        [
+          1409,
+          405
+        ],
+        [
+          95,
+          91
+        ]
+      ],
+      "t_moderate": 0.10973271862092794,
+      "t_high": 0.14956703170294
+    }
+  },
+  "unseen_athlete_cv": {
+    "readiness_MAE": [
+      5.268229981992969,
+      0.05206546819099633
+    ],
+    "readiness_R2": [
+      0.7529217334196477,
+      0.0059513599768668025
+    ],
+    "injury_ROC_AUC": [
+      0.6801304313868833,
+      0.035439009797071756
+    ],
+    "injury_PR_AUC": [
+      0.2176837193511049,
+      0.047499914280805314
+    ]
+  },
+  "note": "SYNTHETIC data - demonstration only, not for clinical or selection decisions."
+}
